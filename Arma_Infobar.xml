@@ -7,11 +7,11 @@
 
 <muclient>
 <plugin
-   name="Armageddon_Infobar"
+   name="Arma_Infobar"
    author="www.robertpate.net"
    id="ea3b8b6b2d305d46439d7806"
    language="Lua"
-   purpose="currently non-operational...would display vital statistics in an infobar at the bottom of the screen"
+   purpose="Displays vital stats. Enter InstallInfobar to setup your character's prompt."
    date_written="2013-10-22 09:01:33"
    requires="4.73"
    version="1.0"
@@ -59,7 +59,7 @@
    multi_line="y"
    name="DetailedInfobarTrigger"
    regexp="y"
-   script="DescriptiveInfobar"
+   script="DetailedInfobar"
    sequence="10"
    variable="DetailedInfobarTrigger"
   >
@@ -84,122 +84,84 @@
 <script>
 <![CDATA[
 --[[
-** note this works but only if you set the prompt yourself, and it won't swap or change the mana display. I need to add callbacks since it's a plugin now.
-http://www.gammon.com.au/scripts/doc.php?general=plugin_callbacks
-
 ###INSTALLATION INSTRUCTIONS###
 
-Step 1: Save this file to your hard drive. I recommend the MushClient/Script directory.
+Step 1: Save this file to your hard drive. I recommend the MushClient/worlds/plugins directory.
 
-Steps 2-4: Hit shift-ctrl-6 to open the scripting settings menu in mushclient. Set your scripting language to Lua (it's default), set your script prefix to forward slash (/), then click the browse button. Find where you downloaded this file and select it. Click OK to close the script dialogue.
+Steps 2-4: Hit shift-ctrl-p to open the plugins menu. Click the "Add" button. Navigate to where you saved this file and select it. Click Close.
 
-Step 5: Hop into your Armageddon character and send this command to arma: /InstallInfobar()
+Step 5: Hop into your Armageddon character and send this command to arma: InstallInfobar
 
-Step 6: If you want mana to display, send this command: /ManaOn()
+Options:
+ManaOn displays your mana values
+ManaOff hides them.
+SwapInfobar swaps between the Detailed and Descriptive versions...
+    Detailed offers a detailed list of numbers.
+    Descriptive drops all numbers and instead says stuff like this:
+        "You're hurting, exhausted, woozy, armed, mounted, and set for running. Also you're Fighting: Amos. It's late afternoon."
 
-Note: If you use the status prompt, this will overwrite it, hide it, and suck all the information out of its brains.
+Note: If you use the status prompt, this will overwrite it, hide it, suck all the information out of its brains, and take its boots.
 
-Note: If your character dies, you just need to add the prompt back with one of these commands: /ManaOn() /ManaOff()
+Note: If your character dies, you just need to add the prompt back with this command: InstallInfobar
 
-Note: I highly recommend optional Step 7! (it's the descriptive infobar. i use it exclusively.)
+Note: If you have problems report them here: https://github.com/robertpateii/armageddon-plugins/issues
 
-If you have problems email me - robert.pate+alsokanks@gmail.com
+Note: If you have the old non-plugin version, remove the 4 old triggers. their names all start with "DetailedInfobarTrigger..."
 
-Optional Step 7:  use this command: /SwapInfobar() to change between Detailed and Descriptive versions. Detailed offers a detailed list of numbers. Descriptive drops all numbers and instead says stuff like "You're hurting, exhausted, woozy, armed, mounted, and set for running. Also you're Fighting: Amos. It's late afternoon."
-
-Optional Step 8: (only for users of previous versions) Remove the old triggers, then reinstall starting at step 5. they start with ^PROMPT_. . .  
-
-###CODE EXPLANATION###
-Unless you want to learn how this thing works or need to configure it beyond the defaults, stop reading.
-
-here is the Status Prompt; enter the entire following line into armageddon after you have logged into your character.
-prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\n
-PROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\n
-PROMPT_%s_manaoff_LINE3\n
-btw, this is a really important piece. changing even the order will break everything in both DetailedInfobar and DescriptiveInfobar.
-
-
-the following line is the new matching string. Create a new trigger and put it into the matching field at the top. Don't save and close it yet though.
-^PROMPT_([^_]+)_([^_]+)_([^_]+)_riding: ([^_]+)_([^_]+)_LINEONE\n
-PROMPT_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_LINETWO\n
-PROMPT_([^_]+)_([^_]+)_LINE3$
-While still in the same trigger, check these options: regular expression, omit from output, and optionally omit from log.
-Lastly you must put the name of the function (script) you want to use in the "script:" field for the trigger. Either DetailedInfobar or DescriptiveInfobar depending on which you want to use.
-
-Again, this is a really important piece. That's because this pattern is regex code for the prompt information. If you change something it may not recognize your prompt info anymore and you'll get a bunch of nil values.
-
-An author's todo list:
-* easier install / instructions / use?
-* better variable scoping?
-* possible speed enhancements?
-
+Note: If you had the old non-plugin version, you can optionally hit Shift-Ctrl-6 and replace the script file with your own file, or replace its contents with your own code.
 
 ]]--
 
-
-
-function installinfobar()
-InstallInfobar()
-end --end installinfobar
-
-function installInfobar()
-InstallInfobar()
-end --end installinfobar
-
-function Installinfobar()
-InstallInfobar()
-end --end installinfobar
-
 function InstallInfobar()
---Prototype for trigger class: long AddTriggerEx(BSTR TriggerName, BSTR MatchText, BSTR ResponseText, long Flags, short Colour, short Wildcard, BSTR SoundFileName, BSTR ScriptName, short SendTo, short Sequence);
-AddTriggerEx ("DetailedInfobarTrigger", "^PROMPT_([^_]+)_([^_]+)_([^_]+)_riding: ([^_]+)_([^_]+)_LINEONE\\nPROMPT_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_LINETWO\\nPROMPT_([^_]+)_([^_]+)_LINE3$", "", 41, -1, 0, "", "DetailedInfobar", 0, 10)
---above line sets up trigger to read in the data from the prompt and feed it to the script.
-SetTriggerOption ("DetailedInfobarTrigger","multi_line", 1)
-SetTriggerOption ("DetailedInfobarTrigger","lines_to_match", 3)
---above two lines enable multi-line matching which is neeeded due to the length of the prompt - it won't fit all on one line
---also note that it's important to set these triggers to 'keep evaluating' otherwise it will only act on each line once.
-AddTriggerEx ("DetailedInfobarTriggerGag1", "^PROMPT_([^_]+)_([^_]+)_([^_]+)_riding: ([^_]+)_([^_]+)_LINEONE$", "", 47, -1, 0, "", "", 0, 20)
-AddTriggerEx ("DetailedInfobarTriggerGag2", "^PROMPT_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_LINETWO$", "", 47, -1, 0, "", "", 0, 20)
-AddTriggerEx ("DetailedInfobarTriggerGag3", "^PROMPT_([^_]+)_([^_]+)_LINE3$", "", 47, -1, 0, "", "", 0, 20)
---above three lines gag the prompt lines - multi-line triggers can't gag text.
-SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
---above creates Prompt ingame. Notice the \\n to create linebreaks in the prompt. The extra \ is needed otherwise the SendImmediate command will hit the enter key, so to speak, when it reads \n.
-ShowInfoBar (true)
---above Turns on infobar in case it's off.
-SendImmediate ("inv")
---above sends just any input to trigger a prompt in game.
-Tell ("You should now see your stats in the infobar at the bottom of your mushclient window. If not, email me - robert.pate+alsokanks@gmail.com")
+    -- Set the prompt in the game. 
+    -- Notice the \\n to create linebreaks in the prompt. The extra \ is needed otherwise the SendImmediate command will hit the enter key, so to speak, when it reads \n.
+    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
+    ShowInfoBar (true)
+    Tell ("Enjoy this infobar for Armageddon.\n")
+    Tell ("Additional commands are ManaOn, ManaOff, and SwapInfobar.\n")
+    Tell ("If you have any issues, report them at\n")
+    Tell ("https://github.com/robertpateii/armageddon-plugins/issues\n")
+    -- Send harmless command to trigger the prompt to update in the game
+    SendImmediate ("inv")
 
 end --end InstallInfobar
 
 function SwapInfobar()
+    local InfobarTriggerScript = GetTriggerOption ("DetailedInfobarTrigger", "script")
+
+    if InfobarTriggerScript == "DetailedInfobar" then
+        SetTriggerOption ("DetailedInfobarTrigger", "script", "DescriptiveInfobar")
+        Tell("Swapped to the descriptive infobar")
+        SendImmediate ("inv")
+    elseif InfobarTriggerScript == "DescriptiveInfobar" then
+        SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
+        Tell("Swapped to the detailed infobar")
+        SendImmediate ("inv")
+    else Tell("Can't swap because of unexpected trigger settings.")
+    end
 end --end SwapInfobar
 
 function OnPluginCommandEntered(sText)
-    if sText == "SwapInfobar" then
-        local InfobarTriggerScript = GetTriggerOption ("DetailedInfobarTrigger", "script")
-
-        if InfobarTriggerScript == "DetailedInfobar" then
-            SetTriggerOption ("DetailedInfobarTrigger", "script", "DescriptiveInfobar")
-            SendImmediate ("inv")
-        elseif InfobarTriggerScript == "DescriptiveInfobar" then
-            SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
-            SendImmediate ("inv")
-        else Note ("Can't swap because of unexpected trigger settings.")
-        end
-        return "\t" -- removes command
+    if sText == "SwapInfobar" then SwapInfobar()
+    elseif sText == "ManaOff" then ManaOff()
+    elseif sText == "ManaOn" then ManaOn()
+    elseif sText == "InstallInfobar" then InstallInfobar()
     else return sText
     end
+    -- the function hasn't already returned so a match occurred. remove it from the command line.
+    return "\t"
 end
 
 function ManaOff()
-SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
-SendImmediate ("inv")
+    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
+    Tell("Ok, mana values are hidden.")
+    SendImmediate ("inv")
 end
 
 function ManaOn()
-SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaon_LINE3\\n")
-SendImmediate ("inv")
+    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaon_LINE3\\n")
+    Tell("Ok, showing mana values.")
+    SendImmediate ("inv")
 end
 
 function DetailedInfobar(thename, theoutput, wildcards)
