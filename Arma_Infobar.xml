@@ -173,18 +173,24 @@ Tell ("You should now see your stats in the infobar at the bottom of your mushcl
 end --end InstallInfobar
 
 function SwapInfobar()
---http://www.gammon.com.au/scripts/function.php?name=GetTriggerOption
-local InfobarTriggerScript      
-InfobarTriggerScript = GetTriggerOption ("DetailedInfobarTrigger", "script")
-        if InfobarTriggerScript == "DetailedInfobar" then
-                SetTriggerOption ("DetailedInfobarTrigger", "script", "DescriptiveInfobar")
-		SendImmediate ("inv")
-        elseif InfobarTriggerScript == "DescriptiveInfobar" then
-                SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
-		SendImmediate ("inv")
-        else Note ("something is rotten in the state of SwapInfobar()")
-end -- if statement
 end --end SwapInfobar
+
+function OnPluginCommandEntered(sText)
+    if sText == "SwapInfobar" then
+        local InfobarTriggerScript = GetTriggerOption ("DetailedInfobarTrigger", "script")
+
+        if InfobarTriggerScript == "DetailedInfobar" then
+            SetTriggerOption ("DetailedInfobarTrigger", "script", "DescriptiveInfobar")
+            SendImmediate ("inv")
+        elseif InfobarTriggerScript == "DescriptiveInfobar" then
+            SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
+            SendImmediate ("inv")
+        else Note ("Can't swap because of unexpected trigger settings.")
+        end
+        return "\t" -- removes command
+    else return sText
+    end
+end
 
 function ManaOff()
 SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
