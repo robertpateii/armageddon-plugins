@@ -113,7 +113,6 @@ Note: If you had the old non-plugin version, you can optionally hit Shift-Ctrl-6
 ]]--
 
 -- Setup global settings and their default values
-InfobarStyle = "detailed" -- other options are descriptive and adaptive
 ShowMana = false
 
 function InstallInfobar()
@@ -169,12 +168,14 @@ end
 
 function ManaOff()
     SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
+    ShowMana = false
     Tell("Ok, mana values are hidden.")
     SendImmediate ("inv")
 end
 
 function ManaOn()
     SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaon_LINE3\\n")
+    ShowMana = true
     Tell("Ok, showing mana values.")
     SendImmediate ("inv")
 end
@@ -603,7 +604,8 @@ end --- end descriptive infobar ---
 function Infobar (triggerName, line, wildcards, lineStyles)
     -- Set global options
     local showMana = ShowMana
-    local infobarStyle = InfobarStyle
+    -- idea - add another global option for InfobarStyle that could be detailed, descriptive, or adaptive.
+    -- Use it to vary how the print statements print.
 
     -- Set wildcards from prompt data
     local accent = wildcards [1]
@@ -629,7 +631,8 @@ function Infobar (triggerName, line, wildcards, lineStyles)
     local defaultBg = "wheat"
     local defaultCol = "black"
 
-    function getIntegerColor (current, max)
+    -- private methods to help with drawing the infobar
+    local function getIntegerColor (current, max)
         local color = defaultCol
 
         if (current/max) < 15/100 then
@@ -646,7 +649,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         return color
     end
 
-    function getTimeColor (value)
+    local function getTimeColor (value)
         local color = defaultCol
 
         if value == "dusk" then
@@ -659,32 +662,38 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         return color
     end
 
-    function resetInfobar () 
+    local function resetInfobar ()
         InfoClear()
         InfoBackground(defaultBg)
         InfoColour(defaultCol)
     end
 
-    function printHealth ()
+    local function printHealth ()
         InfoColour( getIntegerColor(health, healthMax) )
         Info(" HP: ", health)
         InfoColour(defaultCol)
     end
 
-    function printStun ()
+    local function printMana ()
+        InfoColour( getIntegerColor(mana, manaMax) )
+        Info(" Mana: ", mana)
+        InfoColour(defaultCol)
+    end
+
+    local function printStun ()
         InfoColour( getIntegerColor(stun, stunMax) )
         Info(" Stun: ", stun)
         InfoColour(defaultCol)
     end
 
 
-    function printStam ()
+    local function printStam ()
         InfoColour( getIntegerColor(stam, stamMax) )
         Info(" Stam: ", stam)
         InfoColour(defaultCol)
     end
 
-    function printSpeed ()
+    local function printSpeed ()
         if speed == "running" then
             InfoColour ("firebrick")
         elseif speed == "sneaking" then
@@ -696,7 +705,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         InfoColour(defaultCol)
     end
 
-    function printPosition ()
+    local function printPosition ()
         if position == "Fighting" then
             InfoColour ("firebrick")
         elseif position == "sleeping" then
@@ -715,6 +724,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
     -- write the infobar
     resetInfobar()
     printHealth()
+    if (showMana) then printMana() end
     printStun()
     printStam()
     printSpeed()
@@ -723,6 +733,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
 
 end --- end new test infobar ---
 
+-- http://www.luafaq.org/
 
 ]]>
 </script>
