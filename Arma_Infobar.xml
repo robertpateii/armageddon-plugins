@@ -112,6 +112,10 @@ Note: If you had the old non-plugin version, you can optionally hit Shift-Ctrl-6
 
 ]]--
 
+-- Setup global settings and their default values
+InfobarStyle = "detailed" -- other options are descriptive and adaptive
+ShowMana = false
+
 function InstallInfobar()
     -- Set the prompt in the game. 
     -- Notice the \\n to create linebreaks in the prompt. The extra \ is needed otherwise the SendImmediate command will hit the enter key, so to speak, when it reads \n.
@@ -137,15 +141,26 @@ function SwapInfobar()
         SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
         Tell("Swapped to the detailed infobar")
         SendImmediate ("inv")
+    elseif InfobarTriggerScript == "Infobar" then
+        SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
+        Tell("Switching back from the test infobar.")
+        SendImmediate ("inv")
     else Tell("Can't swap because of unexpected trigger settings.")
     end
 end --end SwapInfobar
+
+function TestInfobar ()
+    SetTriggerOption ("DetailedInfobarTrigger", "script", "Infobar")
+    Tell("Swapped to the the test infobar")
+    SendImmediate ("inv")
+end
 
 function OnPluginCommandEntered(sText)
     if sText == "SwapInfobar" then SwapInfobar()
     elseif sText == "ManaOff" then ManaOff()
     elseif sText == "ManaOn" then ManaOn()
     elseif sText == "InstallInfobar" then InstallInfobar()
+    elseif sText == "TestInfobar" then TestInfobar()
     else return sText
     end
     -- the function hasn't already returned so a match occurred. remove it from the command line.
@@ -584,6 +599,130 @@ Info (CurrentTime , ". ")
 end
 
 end --- end descriptive infobar ---
+
+function Infobar (triggerName, line, wildcards, lineStyles)
+    -- Set global options
+    local showMana = ShowMana
+    local infobarStyle = InfobarStyle
+
+    -- Set wildcards from prompt data
+    local accent = wildcards [1]
+    local language = wildcards [2]
+    local mood = wildcards [3]
+    local riding = wildcards [4]
+    local time = wildcards [5]
+    local encumbrance = wildcards [6]
+    local armed = wildcards [7]
+    local speed = wildcards [8]
+    local health = tonumber(wildcards [9])
+    local healthMax = tonumber(wildcards [10])
+    local stun = tonumber(wildcards [11])
+    local stunMax = tonumber(wildcards [12])
+    local stam = tonumber(wildcards [13])
+    local stamMax = tonumber(wildcards [14])
+    local mana = tonumber(wildcards [15])
+    local manaMax = tonumber(wildcards [16])
+    local position = wildcards [17]
+    local displayMana = wildcards [18]
+    
+    -- Set default colors
+    local defaultBg = "wheat"
+    local defaultCol = "black"
+
+    function getIntegerColor (current, max)
+        local color = defaultCol
+
+        if (current/max) < 15/100 then
+            color = "crimson"
+        elseif (current/max) < 35/100 then
+            color = "firebrick"
+        elseif (current/max) < 55/100 then
+            color = "darkorange"
+        elseif (current/max) < 75/100 then
+            color = "darkgreen"
+        else -- no else, already set default color at the top.
+        end
+
+        return color
+    end
+
+    function getTimeColor (value)
+        local color = defaultCol
+
+        if value == "dusk" then
+            color = "firebrick"
+        elseif value == "late afternoon" then
+            color =  "darkorange"
+        else -- no else, already set default color at the top
+        end
+
+        return color
+    end
+
+    function resetInfobar () 
+        InfoClear()
+        InfoBackground(defaultBg)
+        InfoColour(defaultCol)
+    end
+
+    function printHealth ()
+        InfoColour( getIntegerColor(health, healthMax) )
+        Info(" HP: ", health)
+        InfoColour(defaultCol)
+    end
+
+    function printStun ()
+        InfoColour( getIntegerColor(stun, stunMax) )
+        Info(" Stun: ", stun)
+        InfoColour(defaultCol)
+    end
+
+
+    function printStam ()
+        InfoColour( getIntegerColor(stam, stamMax) )
+        Info(" Stam: ", stam)
+        InfoColour(defaultCol)
+    end
+
+    function printSpeed ()
+        if speed == "running" then
+            InfoColour ("firebrick")
+        elseif speed == "sneaking" then
+            InfoColour ("darkorange")
+        end
+
+        Info (" ", speed)
+
+        InfoColour(defaultCol)
+    end
+
+    function printPosition ()
+        if position == "Fighting" then
+            InfoColour ("firebrick")
+        elseif position == "sleeping" then
+            InfoColour ("darkorange")
+        elseif position == "resting" then
+            InfoColour ("darkblue")
+        elseif position == "sitting" then
+            InfoColour ("darkgreen")
+        end
+
+        Info (" ", position)
+
+        InfoColour(defaultCol)
+    end
+
+    -- write the infobar
+    resetInfobar()
+    printHealth()
+    printStun()
+    printStam()
+    printSpeed()
+    printPosition()
+
+
+end --- end new test infobar ---
+
 
 ]]>
 </script>
