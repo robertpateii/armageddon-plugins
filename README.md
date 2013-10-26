@@ -25,11 +25,17 @@ Minimal highlights for keeping track during busy combat scenes.
 
 ### legacy-infobar-script.lua
 
-_Now Replaced by Arma\_Infobar.xml. _
-Originally by [Delirium](http://gdb.armageddon.org/index.php?action=profile;u=281).
+Has been replaced by Arma\_Infobar.xml.  
+Originally by [Delirium](http://gdb.armageddon.org/index.php?action=profile;u=281).  
 Converted in June 2007 to Lua and upgraded over the years by [Robert Pate](http://www.robertpate.net).
 
+### AnArmBarByVenomz.lua
 
-List of other useful Armageddon tools from the community.
-* [Arma clock for Windows](http://sourceforge.net/projects/fltkarmclock/)
-* [Arma clock in Java](http://sourceforge.net/projects/jzalcal/)
+Work in progress based on legacy-infobar-script.lua.
+
+# Other useful Armageddon MUD tools
+
+## Arma Clocks by catstacks
+* [Arma clock for Windows](https://github.com/catstacks/armclock64)
+* [Arma clock in Java](https://github.com/catstacks/JZalCal)
+* [Arma clock for multiple platforms](https://github.com/catstacks/fltkarmclock)
