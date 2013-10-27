@@ -134,11 +134,11 @@ function SwapInfobar()
 
     if InfobarTriggerScript == "DetailedInfobar" then
         SetTriggerOption ("DetailedInfobarTrigger", "script", "DescriptiveInfobar")
-        Tell("Swapped to the descriptive infobar")
+        Tell("Swapped to the descriptive infobar.")
         SendImmediate ("inv")
     elseif InfobarTriggerScript == "DescriptiveInfobar" then
         SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
-        Tell("Swapped to the detailed infobar")
+        Tell("Swapped to the detailed infobar.")
         SendImmediate ("inv")
     elseif InfobarTriggerScript == "Infobar" then
         SetTriggerOption ("DetailedInfobarTrigger", "script", "DetailedInfobar")
@@ -150,7 +150,7 @@ end --end SwapInfobar
 
 function TestInfobar ()
     SetTriggerOption ("DetailedInfobarTrigger", "script", "Infobar")
-    Tell("Swapped to the the test infobar")
+    Tell("Swapped to the the test infobar.")
     SendImmediate ("inv")
 end
 
