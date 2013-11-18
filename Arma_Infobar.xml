@@ -227,6 +227,7 @@ DisplayMana = wildcards [18]-- string used to toggle mana display
 --Setting up default look
 InfoClear ()
 InfoBackground ("wheat")
+InfoFont ("",10,0)
 
 --Add a Text Variable - in the line after next, replace 'TextVariable' with the variable you want to add from the list above. Then uncomment them both.
 --InfoColour ("black")
@@ -448,6 +449,7 @@ DisplayMana = wildcards [18]-- string used to toggle mana display
 --Setting up default look
 InfoClear ()
 InfoBackground ("wheat")
+InfoFont ("",10,0)
 Info ("You're ")
 
 --CurrentHealth
@@ -630,6 +632,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
     -- Set default colors
     local defaultBg = "wheat"
     local defaultCol = "black"
+    local defaultSize = 10
 
     -- private methods to help with drawing the infobar
     local function getIntegerColor (current, max)
@@ -666,6 +669,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         InfoClear()
         InfoBackground(defaultBg)
         InfoColour(defaultCol)
+        InfoFont ("",defaultSize,0)
     end
 
     local function printHealth ()
