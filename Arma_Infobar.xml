@@ -42,7 +42,7 @@
   <trigger
    enabled="y"
    keep_evaluating="y"
-   match="^PROMPT_([^_]+)_([^_]+)_LINE3$"
+   match="^PROMPT_([^_]+)_([^_]+)_([^_]+)_([^_]+)_LINE3$"
    name="DetailedInfobarTriggerGag3"
    omit_from_log="y"
    omit_from_output="y"
@@ -55,7 +55,7 @@
    enabled="y"
    lines_to_match="3"
    keep_evaluating="y"
-   match="^PROMPT_([^_]+)_([^_]+)_([^_]+)_riding: ([^_]+)_([^_]+)_LINEONE\nPROMPT_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_LINETWO\nPROMPT_([^_]+)_([^_]+)_LINE3$"
+   match="^PROMPT_([^_]+)_([^_]+)_([^_]+)_riding: ([^_]+)_([^_]+)_LINEONE\nPROMPT_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_LINETWO\nPROMPT_([^_]+)_([^_]+)_([^_]+)_([^_]+)_LINE3$"
    multi_line="y"
    name="DetailedInfobarTrigger"
    regexp="y"
@@ -118,7 +118,7 @@ ShowMana = false
 function InstallInfobar()
     -- Set the prompt in the game. 
     -- Notice the \\n to create linebreaks in the prompt. The extra \ is needed otherwise the SendImmediate command will hit the enter key, so to speak, when it reads \n.
-    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
+    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_%x_%X_LINE3\\n")
     ShowInfoBar (true)
     Tell ("Enjoy this infobar for Armageddon.\n")
     Tell ("Additional commands are ManaOn, ManaOff, and SwapInfobar.\n")
@@ -167,14 +167,14 @@ function OnPluginCommandEntered(sText)
 end
 
 function ManaOff()
-    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_LINE3\\n")
+    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_%x_%X_LINE3\\n")
     ShowMana = false
     Tell("Ok, mana values are hidden.")
     SendImmediate ("inv")
 end
 
 function ManaOn()
-    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaon_LINE3\\n")
+    SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaon_%x_%X_LINE3\\n")
     ShowMana = true
     Tell("Ok, showing mana values.")
     SendImmediate ("inv")
@@ -222,6 +222,10 @@ local CurrentPosition
 CurrentPosition = wildcards [17]--used by default.
 local DisplayMana
 DisplayMana = wildcards [18]-- string used to toggle mana display
+local CurrentFocus
+CurrentFocus = tonumber(wildcards [19])--used by default.
+local CurrentFocusMax
+CurrentFocusMax = tonumber(wildcards [20])--used by default.
 
 
 --Setting up default look
@@ -318,6 +322,32 @@ InfoColour ("black")
 Info (" ")
 end
 --End CurrentStun with Max
+
+--CurrentFocus
+if (CurrentFocus/CurrentFocusMax) < 20/100 then
+InfoColour ("crimson")
+elseif (CurrentFocus/CurrentFocusMax) < 40/100 then
+InfoColour ("firebrick")
+elseif (CurrentFocus/CurrentFocusMax) < 70/100 then
+InfoColour ("darkorange")
+elseif (CurrentFocus/CurrentFocusMax) < 90/100 then
+InfoColour ("darkgreen")
+elseif CurrentFocus then
+InfoColour ("black")
+end
+Info ("Focus:",CurrentFocus)
+
+--Uncomment the next line and comment in the following that deal with the max value if you want to remove the max but keep the current value.
+--Info (" ")
+--following 7 lines will add the corresponding max value to the display.
+if CurrentFocusMax then
+InfoColour ("black")
+Info ("/",CurrentFocusMax," ")
+else
+InfoColour ("black")
+Info (" ")
+end
+--End CurrentFocus with Max
 
 --CurrentStamina
 if (CurrentStamina/CurrentStaminaMax) < 20/100 then
@@ -444,6 +474,10 @@ local CurrentPosition
 CurrentPosition = wildcards [17]
 local DisplayMana
 DisplayMana = wildcards [18]-- string used to toggle mana display
+local CurrentFocus
+CurrentFocus = tonumber(wildcards [19])--used by default.
+local CurrentFocusMax
+CurrentFocusMax = tonumber(wildcards [20])--used by default.
 
 
 --Setting up default look
@@ -521,17 +555,35 @@ end
 --CurrentStun
         if (CurrentStun/CurrentStunMax) < 5/100 then
                 InfoColour ("crimson")
-                Info ("see only black, ")
+                Info ("seeing only black, ")
         elseif (CurrentStun/CurrentStunMax) < 15/100 then
                 InfoColour ("crimson")
                 Info ("nearly unconcious, ")
         elseif (CurrentStun/CurrentStunMax) < 30/100 then
                 InfoColour ("firebrick")
-                Info ("mentally wracked, ")
+                Info ("senseless, ")
         elseif (CurrentStun/CurrentStunMax) < 45/100 then
                 InfoColour ("darkorange")
-                Info ("woozy, ")
+                Info ("stunned, ")
         elseif (CurrentStun/CurrentStunMax) < 65/100 then
+                InfoColour ("darkgreen")
+                Info ("lightly stunned, ")
+end
+
+--CurrentFocus
+        if (CurrentFocus/CurrentFocusMax) < 5/100 then
+                InfoColour ("crimson")
+                Info ("dumbstruck")
+        elseif (CurrentFocus/CurrentFocusMax) < 15/100 then
+                InfoColour ("crimson")
+                Info ("nearly dumbstruck, ")
+        elseif (CurrentFocus/CurrentFocusMax) < 30/100 then
+                InfoColour ("firebrick")
+                Info ("mentally wracked, ")
+        elseif (CurrentFocus/CurrentFocusMax) < 45/100 then
+                InfoColour ("darkorange")
+                Info ("woozy, ")
+        elseif (CurrentFocus/CurrentFocusMax) < 65/100 then
                 InfoColour ("darkgreen")
                 Info ("dizzy, ")
 end
