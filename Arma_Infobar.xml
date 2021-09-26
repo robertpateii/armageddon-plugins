@@ -121,7 +121,7 @@ function InstallInfobar()
     SendImmediate ("prompt PROMPT_%a_%o_%O_%k_%e_LINEONE\\nPROMPT_%E_%A_%w_%h_%H_%t_%T_%v_%V_%m_%M_LINETWO\\nPROMPT_%s_manaoff_%x_%X_LINE3\\n")
     ShowInfoBar (true)
     Tell ("Enjoy this infobar for Armageddon.\n")
-    Tell ("Additional commands are ManaOn, ManaOff, and SwapInfobar.\n")
+    Tell ("Additional commands are ManaOn, ManaOff, and SwapInfobar which toggles between showing you numbers and adjectives.\n")
     Tell ("If you have any issues, report them at\n")
     Tell ("https://github.com/robertpateii/armageddon-plugins/issues\n")
     -- Send harmless command to trigger the prompt to update in the game
@@ -241,8 +241,6 @@ InfoFont ("",10,0)
 InfoColour ("black")
 Info ("Riding: ",CurrentRiding," ")
 
---[[ Testing auto figuring of ratio. if it breaks, reset ifs to this pattern: elseif tonumber(CurrentHealth) < 40 then
-it will probably break - check how to run operations within an input.]]--
 --CurrentHealth
 if (CurrentHealth/CurrentHealthMax) < 20/100 then
 InfoColour ("crimson")
