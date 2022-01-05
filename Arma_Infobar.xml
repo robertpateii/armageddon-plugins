@@ -239,7 +239,11 @@ InfoFont ("",10,0)
 
 --Riding Status
 InfoColour ("black")
+if CurrentRiding == "none" then
+-- do nothing
+elseif CurrentRiding then
 Info ("Riding: ",CurrentRiding," ")
+end
 
 --CurrentHealth
 if (CurrentHealth/CurrentHealthMax) < 20/100 then
@@ -253,7 +257,7 @@ InfoColour ("darkgreen")
 elseif CurrentHealth then
 InfoColour ("black")
 end
-Info ("Health:",CurrentHealth)
+Info ("Hp:",CurrentHealth)
 
 --Uncomment the next line and comment in the following that deal with the max value if you want to remove the max but keep the current value.
 --Info (" ")
@@ -280,7 +284,7 @@ InfoColour ("darkgreen")
 elseif CurrentMana then
 InfoColour ("black")
 end
-Info ("Mana:",CurrentMana)
+Info ("Ma:",CurrentMana)
 
 --Uncomment the next line and comment in the following that deal with the max value if you want to remove the max but keep the current value.
 --Info (" ")
@@ -307,7 +311,7 @@ InfoColour ("darkgreen")
 elseif CurrentStun then
 InfoColour ("black")
 end
-Info ("Stun:",CurrentStun)
+Info ("Su:",CurrentStun)
 
 --Uncomment the next line and comment in the following that deal with the max value if you want to remove the max but keep the current value.
 --Info (" ")
@@ -333,7 +337,7 @@ InfoColour ("darkgreen")
 elseif CurrentFocus then
 InfoColour ("black")
 end
-Info ("Focus:",CurrentFocus)
+Info ("Fc:",CurrentFocus)
 
 --Uncomment the next line and comment in the following that deal with the max value if you want to remove the max but keep the current value.
 --Info (" ")
@@ -359,7 +363,7 @@ InfoColour ("darkgreen")
 elseif CurrentStamina then
 InfoColour ("black")
 end
-Info ("Stam:",CurrentStamina)
+Info ("Sa:",CurrentStamina)
 
 --Uncomment the next line and comment in the following that deal with the max value if you want to remove the max but keep the current value.
 --Info (" ")
@@ -393,28 +397,40 @@ InfoColour ("black")
 Info (CurrentTime , " ")
 end
 
+--Adding Extra Spacing
+InfoColour ("black")
+Info (" | ")
+
+--Encumbrance
+InfoColour ("black")
+Info (CurrentEncumbrance, " ")
+
 --Walking/Running Status
 InfoColour ("black")
-if CurrentSpeed == "running" then
+if CurrentSpeed == "walking" then
+-- do nothing
+elseif CurrentSpeed == "running" then
 InfoColour ("firebrick")
+Info (CurrentSpeed, " ")
 elseif CurrentSpeed == "sneaking" then
 InfoColour ("darkorange")
+Info (CurrentSpeed, " ")
 elseif CurrentSpeed then
 InfoColour ("black")
-end
 Info (CurrentSpeed, " ")
+end
 
 --Armed/Unarmed Status
 InfoColour ("black")
 if CurrentArmed == "armed" then
 InfoColour ("firebrick")
+Info (CurrentArmed, " ")
 elseif CurrentArmed == "unarmed" then
-InfoColour ("black")
+-- do nothing
 elseif CurrentArmed then
 InfoColour ("black")
-end
 Info (CurrentArmed, " ")
-
+end
 
 --Position. I.e. Standing or Fighting:Target Status
 InfoColour ("black")
