@@ -237,14 +237,6 @@ InfoFont ("",10,0)
 --InfoColour ("black")
 --Info ("abbreviation",TextVariable)
 
---Riding Status
-InfoColour ("black")
-if CurrentRiding == "none" then
--- do nothing
-elseif CurrentRiding then
-Info ("Riding: ",CurrentRiding," ")
-end
-
 --CurrentHealth
 if (CurrentHealth/CurrentHealthMax) < 20/100 then
 InfoColour ("crimson")
@@ -401,10 +393,6 @@ end
 InfoColour ("black")
 Info (" | ")
 
---Encumbrance
-InfoColour ("black")
-Info (CurrentEncumbrance, " ")
-
 --Walking/Running Status
 InfoColour ("black")
 if CurrentSpeed == "walking" then
@@ -432,6 +420,10 @@ InfoColour ("black")
 Info (CurrentArmed, " ")
 end
 
+--Encumbrance
+InfoColour ("black")
+Info (CurrentEncumbrance, " ")
+
 --Position. I.e. Standing or Fighting:Target Status
 InfoColour ("black")
 if CurrentPosition == "Fighting" then
@@ -447,6 +439,13 @@ InfoColour ("black")
 end
 Info (CurrentPosition, " ")
 
+--Riding Status
+InfoColour ("black")
+if CurrentRiding == "none" then
+-- do nothing
+elseif CurrentRiding then
+Info ("Riding: ",CurrentRiding," ")
+end
 
 end --- end detailed infobar ---
 
