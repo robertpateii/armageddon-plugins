@@ -114,6 +114,10 @@ Note: If you had the old non-plugin version, you can optionally hit Shift-Ctrl-6
 
 -- Setup global settings and their default values
 ShowMana = false
+--Setting up default look
+defaultBg = "whitesmoke"
+defaultCol = "black"
+defaultSize = 10
 
 function InstallInfobar()
     -- Set the prompt in the game. 
@@ -230,8 +234,9 @@ CurrentFocusMax = tonumber(wildcards [20])--used by default.
 
 --Setting up default look
 InfoClear ()
-InfoBackground ("wheat")
-InfoFont ("",10,0)
+InfoBackground(defaultBg)
+InfoColour(defaultCol)
+InfoFont ("",defaultSize,1)
 
 --Add a Text Variable - in the line after next, replace 'TextVariable' with the variable you want to add from the list above. Then uncomment them both.
 --InfoColour ("black")
@@ -243,7 +248,7 @@ InfoColour ("crimson")
 elseif (CurrentHealth/CurrentHealthMax) < 40/100 then
 InfoColour ("firebrick")
 elseif (CurrentHealth/CurrentHealthMax) < 70/100 then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 elseif (CurrentHealth/CurrentHealthMax) < 100/100 then
 InfoColour ("darkgreen")
 elseif CurrentHealth then
@@ -270,7 +275,7 @@ InfoColour ("crimson")
 elseif (CurrentMana/CurrentManaMax) < 40/100 then
 InfoColour ("firebrick")
 elseif (CurrentMana/CurrentManaMax) < 70/100 then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 elseif (CurrentMana/CurrentManaMax) < 100/100 then
 InfoColour ("darkgreen")
 elseif CurrentMana then
@@ -297,7 +302,7 @@ InfoColour ("crimson")
 elseif (CurrentStun/CurrentStunMax) < 40/100 then
 InfoColour ("firebrick")
 elseif (CurrentStun/CurrentStunMax) < 70/100 then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 elseif (CurrentStun/CurrentStunMax) < 90/100 then
 InfoColour ("darkgreen")
 elseif CurrentStun then
@@ -323,7 +328,7 @@ InfoColour ("crimson")
 elseif (CurrentFocus/CurrentFocusMax) < 40/100 then
 InfoColour ("firebrick")
 elseif (CurrentFocus/CurrentFocusMax) < 70/100 then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 elseif (CurrentFocus/CurrentFocusMax) < 90/100 then
 InfoColour ("darkgreen")
 elseif CurrentFocus then
@@ -349,7 +354,7 @@ InfoColour ("crimson")
 elseif (CurrentStamina/CurrentStaminaMax) < 40/100 then
 InfoColour ("firebrick")
 elseif (CurrentStamina/CurrentStaminaMax) < 70/100 then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 elseif (CurrentStamina/CurrentStaminaMax) < 90/100 then
 InfoColour ("darkgreen")
 elseif CurrentStamina then
@@ -379,7 +384,7 @@ if CurrentTime == "dusk" then
 InfoColour ("firebrick")
 Info (CurrentTime, " ")
 elseif CurrentTime == "late afternoon" then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 Info (CurrentTime , " ")
 elseif CurrentTime == "unknown" then
 InfoColour ("black")
@@ -401,7 +406,7 @@ elseif CurrentSpeed == "running" then
 InfoColour ("firebrick")
 Info (CurrentSpeed, " ")
 elseif CurrentSpeed == "sneaking" then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 Info (CurrentSpeed, " ")
 elseif CurrentSpeed then
 InfoColour ("black")
@@ -429,7 +434,7 @@ InfoColour ("black")
 if CurrentPosition == "Fighting" then
 InfoColour ("firebrick")
 elseif CurrentPosition == "sleeping" then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 elseif CurrentPosition == "resting" then
 InfoColour ("darkblue")
 elseif CurrentPosition == "sitting" then
@@ -495,8 +500,9 @@ CurrentFocusMax = tonumber(wildcards [20])--used by default.
 
 --Setting up default look
 InfoClear ()
-InfoBackground ("wheat")
-InfoFont ("",10,0)
+InfoBackground(defaultBg)
+InfoColour(defaultCol)
+InfoFont ("",defaultSize,1)
 Info ("You're ")
 
 --CurrentHealth
@@ -510,7 +516,7 @@ Info ("You're ")
                 InfoColour ("firebrick")
                 Info ("dying, ")
         elseif (CurrentHealth/CurrentHealthMax) < 66/100 then
-                InfoColour ("darkorange")
+                InfoColour ("mediumvioletred")
                 Info ("damaged, ")
         elseif (CurrentHealth/CurrentHealthMax) < 85/100 then
                 InfoColour ("darkgreen")
@@ -534,7 +540,7 @@ end
                 InfoColour ("firebrick")
                 Info ("weakened, ")
         elseif (CurrentMana/CurrentManaMax) < 55/100 then
-                InfoColour ("darkorange")
+                InfoColour ("mediumvioletred")
                 Info ("half yourself, ")
         elseif (CurrentMana/CurrentManaMax) < 60/100 then
                 InfoColour ("darkgreen")
@@ -558,7 +564,7 @@ end
                 InfoColour ("firebrick")
                 Info ("exhausted, ")
         elseif (CurrentStamina/CurrentStaminaMax) < 65/100 then
-                InfoColour ("darkorange")
+                InfoColour ("mediumvioletred")
                 Info ("wearing down, ")
         elseif (CurrentStamina/CurrentStaminaMax) < 80/100 then
                 InfoColour ("darkgreen")
@@ -576,7 +582,7 @@ end
                 InfoColour ("firebrick")
                 Info ("senseless, ")
         elseif (CurrentStun/CurrentStunMax) < 45/100 then
-                InfoColour ("darkorange")
+                InfoColour ("mediumvioletred")
                 Info ("stunned, ")
         elseif (CurrentStun/CurrentStunMax) < 65/100 then
                 InfoColour ("darkgreen")
@@ -594,7 +600,7 @@ end
                 InfoColour ("firebrick")
                 Info ("mentally wracked, ")
         elseif (CurrentFocus/CurrentFocusMax) < 45/100 then
-                InfoColour ("darkorange")
+                InfoColour ("mediumvioletred")
                 Info ("woozy, ")
         elseif (CurrentFocus/CurrentFocusMax) < 65/100 then
                 InfoColour ("darkgreen")
@@ -626,7 +632,7 @@ Info ("and set for ")
         if CurrentSpeed == "running" then
                 InfoColour ("firebrick")
         elseif CurrentSpeed == "sneaking" then
-                InfoColour ("darkorange")
+                InfoColour ("mediumvioletred")
         elseif CurrentSpeed then
                 InfoColour ("black")
 end
@@ -639,7 +645,7 @@ Info ("Also, you're ")
 if CurrentPosition == "Fighting" then
 InfoColour ("firebrick")
 elseif CurrentPosition == "sleeping" then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 elseif CurrentPosition == "resting" then
 InfoColour ("darkblue")
 elseif CurrentPosition == "sitting" then
@@ -656,7 +662,7 @@ if CurrentTime == "dusk" then
 InfoColour ("firebrick")
 Info (CurrentTime, " ")
 elseif CurrentTime == "late afternoon" then
-InfoColour ("darkorange")
+InfoColour ("mediumvioletred")
 Info (CurrentTime , " ")
 elseif CurrentTime == "unknown" then
 InfoColour ("black")
@@ -694,11 +700,6 @@ function Infobar (triggerName, line, wildcards, lineStyles)
     local position = wildcards [17]
     local displayMana = wildcards [18]
     
-    -- Set default colors
-    local defaultBg = "wheat"
-    local defaultCol = "black"
-    local defaultSize = 10
-
     -- private methods to help with drawing the infobar
     local function getIntegerColor (current, max)
         local color = defaultCol
@@ -708,7 +709,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         elseif (current/max) < 35/100 then
             color = "firebrick"
         elseif (current/max) < 55/100 then
-            color = "darkorange"
+            color = "mediumvioletred"
         elseif (current/max) < 75/100 then
             color = "darkgreen"
         else -- no else, already set default color at the top.
@@ -723,7 +724,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         if value == "dusk" then
             color = "firebrick"
         elseif value == "late afternoon" then
-            color =  "darkorange"
+            color =  "mediumvioletred"
         else -- no else, already set default color at the top
         end
 
@@ -734,7 +735,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         InfoClear()
         InfoBackground(defaultBg)
         InfoColour(defaultCol)
-        InfoFont ("",defaultSize,0)
+        InfoFont ("",defaultSize,1)
     end
 
     local function printHealth ()
@@ -766,7 +767,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         if speed == "running" then
             InfoColour ("firebrick")
         elseif speed == "sneaking" then
-            InfoColour ("darkorange")
+            InfoColour ("mediumvioletred")
         end
 
         Info (" ", speed)
@@ -778,7 +779,7 @@ function Infobar (triggerName, line, wildcards, lineStyles)
         if position == "Fighting" then
             InfoColour ("firebrick")
         elseif position == "sleeping" then
-            InfoColour ("darkorange")
+            InfoColour ("mediumvioletred")
         elseif position == "resting" then
             InfoColour ("darkblue")
         elseif position == "sitting" then
